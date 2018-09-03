@@ -4,7 +4,7 @@
   "description": "A general-purpose and extensible API server",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest --watch",
     "dev": "nodemon start.js"
   },
   "repository": {
@@ -28,5 +28,10 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "koa": "^2.5.2"
+  },
+  "jest": {
+    "modulePaths": [
+      "<rootDir>"
+    ]
   }
 }
