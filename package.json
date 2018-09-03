@@ -4,7 +4,8 @@
   "description": "A general-purpose and extensible API server",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev": "nodemon start.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/haochengz/geas/issues"
   },
-  "homepage": "https://github.com/haochengz/geas#readme"
+  "homepage": "https://github.com/haochengz/geas#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "koa": "^2.5.2"
+  }
 }
