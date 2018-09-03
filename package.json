@@ -1,0 +1,25 @@
+{
+  "name": "geas",
+  "version": "1.0.0",
+  "description": "A general-purpose and extensible API server",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haochengz/geas.git"
+  },
+  "keywords": [
+    "API",
+    "server",
+    "graphql",
+    "koa"
+  ],
+  "author": "hczhao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haochengz/geas/issues"
+  },
+  "homepage": "https://github.com/haochengz/geas#readme"
+}
