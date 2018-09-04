@@ -1,0 +1,23 @@
+apps:
+  - script: ./start.js
+    name: 'geas'
+    env:
+      COMMON_VARIABLE: true
+    env_production:
+      NODE_ENV: production
+deploy:
+  production:
+    user: root
+    host:
+      - 47.106.125.144
+    port: 22
+    ref: origin/master
+    repo:
+      git@github.com:haochengz/geas.git
+    path:
+      /www/geas/production
+    ssh_options: StrictHostKeyChecking=no
+    pre-deploy: git fetch --all
+    post-deploy: 'cnpm install && pm2 startOrRestart deploy.yaml --env production'
+    env:
+      NODE_ENV: production
