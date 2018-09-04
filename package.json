@@ -4,8 +4,8 @@
   "description": "A general-purpose and extensible API server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
-    "dev": "nodemon start.js"
+    "test": "NODE_ENV=test jest --watch",
+    "dev": "nodemon dev-server.js"
   },
   "repository": {
     "type": "git",
