@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --watch",
-    "dev": "nodemon dev-server.js",
-    "deploy": "pm2 deploy deploy.yaml production"
+    "dev": "nodemon ./server/entrance/dev-server.js",
+    "deploy": "pm2 deploy deploy.yaml production",
+    "start": "nodemon ./server/entrance/start.js"
   },
   "repository": {
     "type": "git",
