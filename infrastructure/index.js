@@ -16,15 +16,16 @@ async function load(app) {
 }
 
 function middlewareInit(app) {
-  console.info('initializing global middlewares')
-  const middlewares = glob.sync(resolve(__dirname, 'middleware', '**/*.js'))
+  const middlewarePath = resolve(__dirname, './middleware/', '**/*.js')
+  console.info('initializing global middlewares from ' + middlewarePath)
+  const middlewares = glob.sync(middlewarePath)
   console.log(`find ${middlewares.length} global middlewares:\n ${middlewares}`)
   middlewares.forEach(
     R.compose(
       middleware => middleware(app),
       file => require(file).default,
       file => {
-        console.log('find one: ', file)
+        console.log('loading: ', file)
         return file
       }
     )
