@@ -17,6 +17,7 @@ deploy:
     path:
       /www/geas/production
     ssh_options: StrictHostKeyChecking=no
+    pre-setup: git clone git@github.com:haochengz/geas.git current
     pre-deploy: git fetch --all
     pre-deploy: git pull
     post-deploy: 'cnpm install && pm2 startOrRestart deploy.yaml --env production'
