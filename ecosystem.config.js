@@ -28,7 +28,8 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:haochengz/geas.git',
       path : '/www/geas/production',
-      'post-deploy' : 'cnpm install && pm2 reload ecosystem.config.js --env production'
+      'pre-deploy': 'git fetch --all',
+      'post-deploy' : 'cnpm install && pm2 startOrRestart ecosystem.config.js --env production'
     },
     dev : {
       user : 'root',
@@ -36,7 +37,8 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:haochengz/geas.git',
       path : '/www/geas/development',
-      'post-deploy' : 'cnpm install && pm2 reload ecosystem.config.js --env dev',
+      'pre-deploy': 'git fetch --all',
+      'post-deploy' : 'cnpm install && pm2 startOrRestart ecosystem.config.js --env dev',
       env  : {
         NODE_ENV: 'dev'
       }
