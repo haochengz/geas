@@ -1,5 +1,5 @@
 apps:
-  - script: ./start.js
+  - script: ./source/server/entrance/start.js
     name: 'geas'
     env:
       COMMON_VARIABLE: true
