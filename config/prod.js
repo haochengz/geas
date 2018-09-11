@@ -1,5 +1,5 @@
 
-const secret = require('~/var/secret')
+const secret = require('/root/var/secret')
 
 module.exports = {
   'db': secret.db,
