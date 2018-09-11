@@ -21,7 +21,11 @@ function middlewareInit(app) {
   glob.sync(resolve(__dirname, './middleware/', '**/*.js')).forEach(
     R.compose(
       middleware => middleware(app),
-      file => require(file).default
+      file => require(file).default,
+      file => {
+        console.log('find one: ', file)
+        return file
+      }
     )
   )
 }
