@@ -7,7 +7,7 @@ module.exports = {
 
     {
       name      : 'GEAS',
-      script    : 'server/entrance/app.js',
+      script    : 'server/entrance/start.js',
       env: {
         COMMON_VARIABLE: 'true'
       },
