@@ -10,7 +10,7 @@ const PROJECTS = [
 ]
 const app = new Koa()
 
-load()
+load(app)
   .then(() => {
     R.map(R.compose(
       async initial => await initial(app),
