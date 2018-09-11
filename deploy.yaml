@@ -18,6 +18,7 @@ deploy:
       /www/geas/production
     ssh_options: StrictHostKeyChecking=no
     pre-deploy: git fetch --all
+    pre-deploy: git pull
     post-deploy: 'cnpm install && pm2 startOrRestart deploy.yaml --env production'
     env:
       NODE_ENV: production
