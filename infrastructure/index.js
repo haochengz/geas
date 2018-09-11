@@ -7,9 +7,7 @@ import { connect } from './database'
 
 async function load(app) {
   try {
-    console.info('connecting to database')
     await connect()
-    console.info('initializing global middlewares')
     middlewareInit(app)
   } catch(error) {
     console.error(error)
@@ -18,7 +16,8 @@ async function load(app) {
 }
 
 function middlewareInit(app) {
-  glob.sync(resolve(__dirname, './middleware/', '**/*.js')).forEach(
+  console.info('initializing global middlewares')
+  glob.sync(resolve(__dirname, 'middleware', '**/*.js')).forEach(
     R.compose(
       middleware => middleware(app),
       file => require(file).default,

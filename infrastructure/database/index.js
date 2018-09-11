@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const { db } = require('../../config').default
 
 mongoose.Promise = Promise
+mongoose.set('useCreateIndex', true)
 
 const connectionUrl = `mongodb://${db.admin}:${db.pwd}@${db.host}:${db.port}/${db.name}`
 
@@ -14,7 +15,9 @@ exports.connect = () => {
     if (process.env.NODE_ENV !== 'production') {
       mongoose.set('debug', true)
     }
-    mongoose.connect(connectionUrl, { useNewUrlParser: true })
+    mongoose.connect(connectionUrl, {
+      useNewUrlParser: true
+    })
 
     mongoose.connection.on('disconnection', () => {
       connectAttempts++
