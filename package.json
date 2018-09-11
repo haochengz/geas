@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest --watch",
     "dev": "nodemon ./server/entrance/dev-server.js",
-    "deploy": "pm2 deploy deploy.yaml production",
+    "deploy": "pm2 deploy ecosystem.config.js production",
     "start": "nodemon ./server/entrance/start.js"
   },
   "repository": {
