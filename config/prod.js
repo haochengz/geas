@@ -1,4 +1,4 @@
 
-export const server = {
-  port: 4422
+module.exports = {
+  ...require('~/var/secret')
 }
