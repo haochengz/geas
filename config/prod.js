@@ -1,4 +1,6 @@
 
+const secret = require('~/var/secret')
+
 module.exports = {
-  ...require('~/var/secret')
+  ...secret
 }
