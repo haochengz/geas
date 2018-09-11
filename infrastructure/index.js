@@ -7,8 +7,10 @@ import { connect } from './database'
 
 async function load(app) {
   try {
+    console.info('connecting to database')
     await connect()
-    await middlewareInit(app)
+    console.info('initializing global middlewares')
+    middlewareInit(app)
   } catch(error) {
     console.error(error)
     throw new Error('Infrastructure loading failed')
