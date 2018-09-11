@@ -1,7 +1,5 @@
 
 const secret = require('/root/var/secret')
 
-module.exports = {
-  'db': secret.db,
-  'server': secret.server
-}
+exports.db = secret.db
+exports.server = secret.server
