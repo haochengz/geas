@@ -28,7 +28,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:haochengz/geas.git',
       path : '/www/geas/production',
-      'post-deploy' : 'cd source && cnpm install && pm2 startOrRestart ./source/ecosystem.config.js --env production',
+      'post-deploy' : 'cd source && cnpm install && pm2 startOrRestart ecosystem.config.js --env production',
       env  : {
         NODE_ENV: 'production'
       }
