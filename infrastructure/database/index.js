@@ -19,7 +19,7 @@ exports.connect = () => {
     mongoose.connection.on('disconnection', () => {
       connectAttempts++
       if (connectAttempts >= maxConnectAttempts) {
-        reject('REJ-FAIL: DB connect is reaching max attempts.')
+        reject('REJ-FAIL: DB connect is reaching max attempts. failed to reach: ' + connectionUrl)
       }
       mongoose.connect(connectionUrl, { useNewUrlParser: true })
     })
@@ -27,7 +27,7 @@ exports.connect = () => {
     mongoose.connection.on('error', () => {
       connectAttempts++
       if (connectAttempts >= maxConnectAttempts) {
-        reject('REJ-FAIL: DB connect is reaching max attempts.')
+        reject('REJ-FAIL: DB connect is reaching max attempts. failed to reach: ' + connectionUrl)
       }
       mongoose.connect(connectionUrl, { useNewUrlParser: true })
     })
