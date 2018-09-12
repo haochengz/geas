@@ -10,15 +10,17 @@ let movieSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  category: [{
+  category: {
     type: ObjectId,
     ref: 'Category'
-  }],
+  },
   title: String,
   rate: Number,
   summary: String,
   posterKey: String,
   coverKey: String,
+  videoKey: String,
+  video: String,
   poster: String,
   cover: String,
   rawTitle: String,
