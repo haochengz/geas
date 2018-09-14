@@ -10,7 +10,7 @@ export function fetchMovieList() {
       movies = await fetchList()
     } catch(error) {
       console.error(error)
-      reject('Fetch Movie list failed')
+      reject('Fetch Movie list failed because: ', error)
     }
     if(!movies || !movies.data || !movies.data.length) {
       reject('No any data were found, maybe network is down')
