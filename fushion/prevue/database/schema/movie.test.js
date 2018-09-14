@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose')
-require('./movie')
+require('./movie.schema')
 const Movie = mongoose.model('Movie')
 
 test('should run with test environment', () => {

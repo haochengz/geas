@@ -4,7 +4,9 @@
   "description": "A general-purpose and extensible API server",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --watch",
+    "test": "NODE_ENV=test jest",
+    "watch": "NODE_ENV=test jest --watch",
+    "coverage": "NODE_ENV=test jest --coverage",
     "dev": "nodemon ./server/entrance/dev-server.js",
     "deploy": "pm2 deploy ecosystem.config.js production",
     "start": "nodemon ./server/entrance/start.js"
@@ -27,6 +29,7 @@
   "homepage": "https://github.com/haochengz/geas#readme",
   "dependencies": {
     "babel-core": "^6.26.3",
+    "babel-plugin-rewire": "^1.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "glob": "^7.1.3",
@@ -35,6 +38,7 @@
     "koa-graphql": "^0.7.5",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
+    "mockingoose": "^2.10.1",
     "mongoose": "^5.2.14",
     "puppeteer": "^1.8.0",
     "ramda": "^0.25.0"

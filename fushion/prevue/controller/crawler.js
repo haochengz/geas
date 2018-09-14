@@ -1,31 +1,24 @@
 
 import fetchList from '../tasks/fetch-list'
-import { findOneMovie, updateMovie, addMovie } from './movie'
+import { updateMovie, getMovie, addMovie } from './movie'
 
-module.exports = async function() {
-  let updated = 0
-  let created = 0
-  const result = await fetchList()
-  result.data.forEach(async item => {
-    const status = await save(item)
-    if(status === 'update') updated++
-    else if(status === 'create') created++
-  })
-  return `Updated ${updated} movies and created ${created} new movies`
-}
-
-
-async function save(movie) {
-  try {
-    if(await findOneMovie(movie)) {
-      await updateMovie(movie)
-      return 'update'
-    } else {
-      await addMovie(movie)
-      return 'create'
+export function fetchMovieList() {
+  return new Promise(async (resolve, reject) => {
+    let created = 0, updated = 0
+    const movies = await fetchList()
+    if(!movies || !movies.data || !movies.data.length) {
+      reject('No any data were found, maybe network is down')
     }
-  } catch(error) {
-    console.error(error)
-    throw new Error('Fetch movie list failed')
-  }
+    movies.data.forEach(async (movie, index) => {
+      const exists = await getMovie(movie)
+      if(!exists) {
+        await addMovie(movie).then(() => created++)
+      } else {
+        await updateMovie(movie).then(() => updated++)
+      }
+      if(index === movies.data.length - 1) {
+        resolve(`Updated ${updated} movies and created ${created} new movies`)
+      }
+    })
+  })
 }

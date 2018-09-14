@@ -1,7 +1,7 @@
 
 import Router from 'koa-router'
 import { getAllMovies, getMovie } from '../controller/movie'
-import fetchList from '../controller/crawler'
+import { fetchMovieList } from '../controller/crawler'
 
 const router = new Router()
 
@@ -51,7 +51,7 @@ router.get('/movies/:mid', async (ctx, next) => {
 router.get('/crawler/list', async (ctx, next) => {
   let result = ''
   try {
-    result = await fetchList()
+    result = await fetchMovieList()
     ctx.body = result
   } catch(error) {
     console.error(error)

@@ -1,7 +1,6 @@
 
 const puppeteer = require('puppeteer')
-const { promisify } = require('util')
-const sleep = promisify(setTimeout)
+const { sleep } = require('../../../lib/util/helper')
 
 const tempUrl = 'https://movie.douban.com/tag/#/?sort=R&range=6,10&tags=%E7%BE%8E%E5%9B%BD,%E7%94%B5%E5%BD%B1'
 // movie >> us >> rated(6 ~ 10) >> sort(newest) >> all
@@ -14,21 +13,24 @@ async function getBrowser() {
       dumpio: false
     })
   } catch(error) {
-    console.error(error)
-    throw new Error('Start browser failed')
+    throw 'Start browser failed because ' + error
   }
   return browser
 }
 
 function unfoldList(page, url) {
-  return new Promise(async resolve => {
-    await page.goto(url, {
-      waitUntil: 'networkidle2'
-    })
-    await page.waitForSelector('.more')
-    page.click('.more')
-      .then(() => sleep(3000))
-      .then(() => resolve(page))
+  return new Promise(async (resolve, reject) => {
+    try {
+      await page.goto(url, {
+        waitUntil: 'networkidle2'
+      })
+      await page.waitForSelector('.more')
+      page.click('.more')
+        .then(() => sleep(3000))
+        .then(() => resolve(page))
+    } catch(error) {
+      reject('Unfold the list page failed because: ' + error)
+    }
   })
 }
 
