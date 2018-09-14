@@ -5,7 +5,13 @@ import { updateMovie, getMovie, addMovie } from './movie'
 export function fetchMovieList() {
   return new Promise(async (resolve, reject) => {
     let created = 0, updated = 0
-    const movies = await fetchList()
+    let movies = null
+    try {
+      movies = await fetchList()
+    } catch(error) {
+      console.error(error)
+      reject('Fetch Movie list failed')
+    }
     if(!movies || !movies.data || !movies.data.length) {
       reject('No any data were found, maybe network is down')
     }
