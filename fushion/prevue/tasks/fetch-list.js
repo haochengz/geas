@@ -23,7 +23,7 @@ module.exports = function() {
     })
 
     child.on('message', bundle => {
-      if(invoked) resolve(bundle.result)
+      resolve(bundle.result)
     })
   })
 }
