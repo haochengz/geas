@@ -9,10 +9,10 @@ module.exports = function() {
     const child = cp.fork(doubanCrawlerPath, [])
     let invoked = false
 
-    child.on('error', err => {
+    child.on('error', error => {
       if (invoked) return
       invoked = true
-      reject(err)
+      reject(`Movie list fetching exited with error: ${error}`)
     })
 
     child.on('exit', code => {
@@ -23,7 +23,7 @@ module.exports = function() {
     })
 
     child.on('message', bundle => {
-      resolve(bundle.result)
+      if(invoked) resolve(bundle.result)
     })
   })
 }
