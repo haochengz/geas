@@ -34,11 +34,22 @@ export function extractContent(rawData) {
 export function fetchMovies(ids) {
   return new Promise(resolve => {
     let movies = []
+    let successNum = 0, failedNum = 0
     ids.forEach(async (id, index) => {
-      const details = await fetchJSON(id)
-      const movie = extractContent(details)
-      movies.push(movie)
-      if(index === ids.length - 1) resolve(movies)
+      try {
+        const details = await fetchJSON(id)
+        const movie = extractContent(details)
+        movies.push(movie)
+        successNum++
+      } catch(error) {
+        failedNum++
+      }
+      if(index === ids.length - 1) resolve({
+        count: ids.length,
+        successNum: successNum,
+        failedNum: failedNum,
+        data: movies
+      })
     })
   })
 }
