@@ -23,7 +23,18 @@ load(app)
       console.info(`Listening ${config.server.port}... ...`)
     })
   })
+  // .then(async () => {
+  //   await foo()
+  // })
   .catch(error => {
     console.error('Server start failed')
     console.error(error)
   })
+
+// async function foo() {
+//   const mongoose = require('mongoose')
+//   const Movie = mongoose.model('Movie')
+//   const movie = await Movie.findOne({ doubanId: '27606054' })
+//   // const movies = await Movie.find({})
+//   console.log('IT IS: ', movie)
+// }

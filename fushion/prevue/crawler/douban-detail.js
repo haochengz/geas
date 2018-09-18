@@ -31,7 +31,7 @@ export function extractContent(rawData) {
   return content
 }
 
-export function fetchMovies(ids) {
+export function fetchMovieDetails(ids) {
   return new Promise(resolve => {
     let movies = []
     let successNum = 0, failedNum = 0

@@ -41,9 +41,22 @@ const updateMovie = async movie => {
   }
 }
 
+const isExisted = async (movie={}) => {
+  if(!movie.id && !movie.doubanId) throw 'Must have an id or doubanId field in parameter'
+  let doc = await Movie.findOne({
+    $or: [
+      {_id: movie.id},
+      {doubanId: movie.doubanId}
+    ]
+  })
+  if(doc) return true
+  else return false
+}
+
 module.exports = {
   getAllMovies,
   getMovie,
   addMovie,
-  updateMovie
+  updateMovie,
+  isExisted
 }

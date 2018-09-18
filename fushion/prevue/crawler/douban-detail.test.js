@@ -3,7 +3,7 @@ import got from 'got'
 import {
   fetchJSON,
   extractContent,
-  fetchMovies
+  fetchMovieDetails
 } from './douban-detail'
 
 jest.mock('got', () => jest.fn())
@@ -100,24 +100,24 @@ describe('extractContent()', () => {
   })
 })
 
-describe('fetchMovies()', () => {
+describe('fetchMovieDetails()', () => {
   beforeEach(() => {
     got.mockReset()
     got.mockResolvedValue({statusCode: 200, body: body})
   })
 
   it('should reveives a doubanId array and calls fetchJSON for each item', () => {
-    fetchMovies(['111', '222', '333', '444', '555'])
+    fetchMovieDetails(['111', '222', '333', '444', '555'])
     expect(got.mock.calls.length).toBe(5)
   })
 
   it('should maps extractContent with the result of fetchJSON as each item and returns', async () => {
-    const movies = await fetchMovies(['111', '222', '333', '444', '555'])
+    const movies = await fetchMovieDetails(['111', '222', '333', '444', '555'])
     expect(movies.data.length).toBe(5)
   })
 
   it('should has the movies in each item of the result', async () => {
-    const movies = await fetchMovies(['111', '222', '333', '444', '555'])
+    const movies = await fetchMovieDetails(['111', '222', '333', '444', '555'])
     expect(movies.data[1].rawTitle).toBe('Mission: Impossible - Fallout')
   })
 
@@ -127,9 +127,10 @@ describe('fetchMovies()', () => {
     got.mockResolvedValueOnce({statusCode: 200, body: body})
     got.mockResolvedValueOnce({statusCode: 200 })
     got.mockResolvedValueOnce({statusCode: 200, body: body})
-    const movies = await fetchMovies(['111', '222', '333', '444', '555'])
+    const movies = await fetchMovieDetails(['111', '222', '333', '444', '555'])
     expect(movies.count).toBe(5)
     expect(movies.successNum).toBe(3)
     expect(movies.failedNum).toBe(2)
+    expect(movies.data.length).toBe(3)
   })
 })
