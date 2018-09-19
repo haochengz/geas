@@ -1,177 +1,209 @@
 
-import { fetchMovies, fetchMovieList, fetchMovieDetail } from './crawler'
-import { isExisted } from './movie'
-import { fetchMovieDetails } from '../crawler/douban-detail'
-import fetchList from '../tasks/fetch-list'
+import Crawler from './crawler'
 
-const filterOutDuplication = require('./crawler.js').__get__('filterOutDuplication')
+describe('Crawler Factory Test', () => {
+  let crawler = null
 
-jest.mock('../tasks/fetch-list', () => jest.fn())
-jest.mock('./movie', () => ({
-  isExisted: jest.fn()
-}))
-jest.mock('../crawler/douban-detail', () => ({
-  fetchMovieDetails: jest.fn()
-}))
-
-describe('fetchMoves()', () => {
   beforeEach(() => {
-    fetchList.mockReset()
-    fetchList.mockResolvedValue({ data: [] })
-    isExisted.mockReset()
-    isExisted.mockResolvedValue(false)
+    crawler = new Crawler()
+  })
+  it('should creates a crawler instance', () => {
+    expect(crawler.status).toBe('Before initiate')
   })
 
-  it('should excute the functions sequentially', async () => {
-    fetchList.mockResolvedValue({ data: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}] })
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValue(false)
-    fetchMovieDetails.mockResolvedValue({
-      data: [{doubanId: 2, title: 'King Kong'}, {doubanId: 3, title: 'Avengers'}, {doubanId: 4, title: 'Spider Man'}],
-      failedNum: 3
-    })
-    const movies = await fetchMovies()
-    expect(movies.discardNum).toBe(4)
+  it('should resolves a string to report by calling start method', async () => {
+    const report = await crawler.start()
+    expect(typeof report).toBe('string')
+  })
+
+  it('should report the crawler to be done or failed', async () => {
+    const report = await crawler.start()
+    const firstLine = report.split('\n')[0]
+    expect(firstLine).toBe('Unfinish')
   })
 })
 
-describe('fetchMovieList()', () => {
-  const initData = {
-    models: [],
-    receiveNum: 0,
-    discardNum: 0
-  }
-  beforeEach(() => {
-    fetchList.mockReset()
-    fetchList.mockResolvedValue({ data: [] })
-  })
-  it('should calls fetchList to get a set of movies', async () => {
-    await fetchMovieList(initData)
-    expect(fetchList).toHaveBeenCalled()
-  })
+//------------------------------------------------------------------------------
+// v0.2
+//------------------------------------------------------------------------------
 
-  it('should add movies to the passing in parameter and returns', async () => {
-    fetchList.mockResolvedValue({ data: [1, 2, 3] })
-    const movies = await fetchMovieList(initData)
-    expect(movies.models).toHaveLength(3)
-  })
+// import { fetchMovies, fetchMovieList, fetchMovieDetail } from './crawler'
+// import { isExisted } from './movie'
+// import { fetchMovieDetails } from '../crawler/douban-detail'
+// import fetchList from '../tasks/fetch-list'
 
-  it('should record how much data were received', async () => {
-    fetchList.mockResolvedValue({ data: [1, 2, 3] })
-    const movies = await fetchMovieList(initData)
-    expect(movies.receiveNum).toBe(3)
-  })
+// const filterOutDuplication = require('./crawler.js').__get__('filterOutDuplication')
 
-  it('should no field been discarded during list fetching', async () => {
-    fetchList.mockResolvedValue({ data: [1, 2, 3] })
-    const movies = await fetchMovieList(initData)
-    expect(movies.discardNum).toBe(0)
-  })
-})
+// jest.mock('../tasks/fetch-list', () => jest.fn())
+// jest.mock('./movie', () => ({
+//   isExisted: jest.fn()
+// }))
+// jest.mock('../crawler/douban-detail', () => ({
+//   fetchMovieDetails: jest.fn()
+// }))
 
-describe('filterOutDuplicated', async () => {
-  let initialData = null
-  beforeEach(() => {
-    isExisted.mockReset()
-    initialData = {
-      models: [1, 2, 3, 4, 5, 6],
-      receiveNum: 6,
-      discardNum: 0
-    }
-  })
-  it('should calls movie controller for each movie to determine its existed or not', async () => {
-    await filterOutDuplication(initialData)
-    expect(isExisted).toHaveBeenCalled()
-  })
+// describe('fetchMoves()', () => {
+//   beforeEach(() => {
+//     fetchList.mockReset()
+//     fetchList.mockResolvedValue({ data: [] })
+//     isExisted.mockReset()
+//     isExisted.mockResolvedValue(false)
+//   })
 
-  it('should filter out the movie from duplicate', async () => {
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(true)
-    const after = await filterOutDuplication(initialData)
-    expect(after.discardNum).toBe(4)
-  })
+//   it('should excute the functions sequentially', async () => {
+//     fetchList.mockResolvedValue({ data: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}] })
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValue(false)
+//     fetchMovieDetails.mockResolvedValue({
+//       data: [{doubanId: 2, title: 'King Kong'}, {doubanId: 3, title: 'Avengers'}, {doubanId: 4, title: 'Spider Man'}],
+//       failedNum: 3
+//     })
+//     const movies = await fetchMovies()
+//     expect(movies.discardNum).toBe(4)
+//   })
+// })
 
-  it('should only unexisted movie remains', async () => {
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(true)
-    const after = await filterOutDuplication(initialData)
-    expect(after.models).toEqual([3, 5])
-  })
+// describe('fetchMovieList()', () => {
+//   const initData = {
+//     models: [],
+//     receiveNum: 0,
+//     discardNum: 0
+//   }
+//   beforeEach(() => {
+//     fetchList.mockReset()
+//     fetchList.mockResolvedValue({ data: [] })
+//   })
+//   it('should calls fetchList to get a set of movies', async () => {
+//     await fetchMovieList(initData)
+//     expect(fetchList).toHaveBeenCalled()
+//   })
 
-  it('should discard the movie when isExisted throw an error', async () => {
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockRejectedValueOnce('') // rejection
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    const after = await filterOutDuplication(initialData)
-    expect(after.models).toEqual([2, 3, 6])
-  })
+//   it('should add movies to the passing in parameter and returns', async () => {
+//     fetchList.mockResolvedValue({ data: [1, 2, 3] })
+//     const movies = await fetchMovieList(initData)
+//     expect(movies.models).toHaveLength(3)
+//   })
 
-  it('should finish anyway whereas isExisted throwing an error at last element', async () => {
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockResolvedValueOnce(true)
-    isExisted.mockResolvedValueOnce(false)
-    isExisted.mockRejectedValueOnce('') // rejection
-    const after = await filterOutDuplication(initialData)
-    expect(after.models).toEqual([2, 3, 5])
-  })
-})
+//   it('should record how much data were received', async () => {
+//     fetchList.mockResolvedValue({ data: [1, 2, 3] })
+//     const movies = await fetchMovieList(initData)
+//     expect(movies.receiveNum).toBe(3)
+//   })
 
-describe('fetchMovieDetail()', () => {
-  beforeEach(() => {
-    fetchMovieDetails.mockReset()
-    fetchMovieDetails.mockResolvedValue({
-      data: []
-    })
-  })
+//   it('should no field been discarded during list fetching', async () => {
+//     fetchList.mockResolvedValue({ data: [1, 2, 3] })
+//     const movies = await fetchMovieList(initData)
+//     expect(movies.discardNum).toBe(0)
+//   })
+// })
 
-  it('should calls fetchMovies with an array of doubanIds', async () => {
-    await fetchMovieDetail({
-      models: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}],
-      receiveNum: 6,
-      discardNum: 1
-    })
-    expect(fetchMovieDetails).toHaveBeenCalledWith([{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}])
-  })
+// describe('filterOutDuplicated', async () => {
+//   let initialData = null
+//   beforeEach(() => {
+//     isExisted.mockReset()
+//     initialData = {
+//       models: [1, 2, 3, 4, 5, 6],
+//       receiveNum: 6,
+//       discardNum: 0
+//     }
+//   })
+//   it('should calls movie controller for each movie to determine its existed or not', async () => {
+//     await filterOutDuplication(initialData)
+//     expect(isExisted).toHaveBeenCalled()
+//   })
 
-  it('should resolves an array contains all the movie details', async () => {
-    fetchMovieDetails.mockResolvedValue({
-      data: [{doubanId: 1, title: 'King Kong'}, {doubanId: 2, title: 'Avengers'}, {doubanId: 3, title: 'Spider Man'}],
-      failedNum: 3
-    })
-    const data = await fetchMovieDetail({
-      models: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}],
-      receiveNum: 6,
-      discardNum: 1
-    })
-    expect(data.models[1].title).toBe('Avengers')
-  })
+//   it('should filter out the movie from duplicate', async () => {
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(true)
+//     const after = await filterOutDuplication(initialData)
+//     expect(after.discardNum).toBe(4)
+//   })
 
-  it('should excludes the failed field from dataSet', async () => {
-    fetchMovieDetails.mockResolvedValue({
-      data: [{doubanId: 1, title: 'King Kong'}, {doubanId: 2, title: 'Avengers'}, {doubanId: 3, title: 'Spider Man'}],
-      failedNum: 3
-    })
-    const data = await fetchMovieDetail({
-      models: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}],
-      receiveNum: 6,
-      discardNum: 1
-    })
-    expect(data.discardNum).toBe(4)
-  })
-})
+//   it('should only unexisted movie remains', async () => {
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(true)
+//     const after = await filterOutDuplication(initialData)
+//     expect(after.models).toEqual([3, 5])
+//   })
+
+//   it('should discard the movie when isExisted throw an error', async () => {
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockRejectedValueOnce('') // rejection
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     const after = await filterOutDuplication(initialData)
+//     expect(after.models).toEqual([2, 3, 6])
+//   })
+
+//   it('should finish anyway whereas isExisted throwing an error at last element', async () => {
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockResolvedValueOnce(true)
+//     isExisted.mockResolvedValueOnce(false)
+//     isExisted.mockRejectedValueOnce('') // rejection
+//     const after = await filterOutDuplication(initialData)
+//     expect(after.models).toEqual([2, 3, 5])
+//   })
+// })
+
+// describe('fetchMovieDetail()', () => {
+//   beforeEach(() => {
+//     fetchMovieDetails.mockReset()
+//     fetchMovieDetails.mockResolvedValue({
+//       data: []
+//     })
+//   })
+
+//   it('should calls fetchMovies with an array of doubanIds', async () => {
+//     await fetchMovieDetail({
+//       models: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}],
+//       receiveNum: 6,
+//       discardNum: 1
+//     })
+//     expect(fetchMovieDetails).toHaveBeenCalledWith([{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}])
+//   })
+
+//   it('should resolves an array contains all the movie details', async () => {
+//     fetchMovieDetails.mockResolvedValue({
+//       data: [{doubanId: 1, title: 'King Kong'}, {doubanId: 2, title: 'Avengers'}, {doubanId: 3, title: 'Spider Man'}],
+//       failedNum: 3
+//     })
+//     const data = await fetchMovieDetail({
+//       models: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}],
+//       receiveNum: 6,
+//       discardNum: 1
+//     })
+//     expect(data.models[1].title).toBe('Avengers')
+//   })
+
+//   it('should excludes the failed field from dataSet', async () => {
+//     fetchMovieDetails.mockResolvedValue({
+//       data: [{doubanId: 1, title: 'King Kong'}, {doubanId: 2, title: 'Avengers'}, {doubanId: 3, title: 'Spider Man'}],
+//       failedNum: 3
+//     })
+//     const data = await fetchMovieDetail({
+//       models: [{doubanId: 1}, {doubanId: 2}, {doubanId: 3}, {doubanId: 4}, {doubanId: 5}, {doubanId: 6}],
+//       receiveNum: 6,
+//       discardNum: 1
+//     })
+//     expect(data.discardNum).toBe(4)
+//   })
+// })
+
+//------------------------------------------------------------------------------
+// v0.1
+//------------------------------------------------------------------------------
 
 // import { fetchMovieList } from './crawler'
 // jest.mock('../tasks/fetch-list', () => jest.fn())
