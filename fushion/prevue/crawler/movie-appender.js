@@ -1,5 +1,5 @@
 
-import fetchList from '../tasks/fetch-list'
+import fetchList from './tasks/fetch-list'
 
 export default function fetchBrief(wrapper) {
   return new Promise(resolve => {

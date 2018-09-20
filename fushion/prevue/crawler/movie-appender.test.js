@@ -1,10 +1,10 @@
 
-import fetchList from '../tasks/fetch-list'
+import fetchList from './tasks/fetch-list'
 import fetchBrief from './movie-appender'
 const fetch = require('./movie-appender').__get__('fetch')
 const filter = require('./movie-appender').__get__('filter')
 
-jest.mock('../tasks/fetch-list', () => jest.fn())
+jest.mock('./tasks/fetch-list', () => jest.fn())
 
 describe('fetchBrief()', () => {
   let initData = {}
