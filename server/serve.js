@@ -33,12 +33,12 @@ load(app)
 
 // async function foo() {
 //   const mongoose = require('mongoose')
-//   const trailerFetcher = require('../fushion/prevue/crawler/tasks/fetch-trailer')
+//   const uploader = require('../fushion/prevue/crawler/douban-uploader')
 //   const Movie = mongoose.model('Movie')
 //   const movies = await Movie.find({
 //     rate: { $gt: 8.5 }
 //   })
 //   console.log(movies)
-//   const res = await trailerFetcher(movies)
+//   const res = await uploader(movies)
 //   console.log(res)
 // }

@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/haochengz/geas#readme",
   "dependencies": {
+    "ali-oss": "^6.0.1",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
     "babel-plugin-rewire": "^1.2.0",
@@ -42,8 +43,10 @@
     "koa-router": "^7.4.0",
     "mockingoose": "^2.10.1",
     "mongoose": "^5.2.14",
+    "nanoid": "^1.2.3",
     "puppeteer": "^1.8.0",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "request": "^2.88.0"
   },
   "jest": {
     "modulePaths": [
