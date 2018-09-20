@@ -23,7 +23,36 @@ load(app)
       console.info(`Listening ${config.server.port}... ...`)
     })
   })
+  // .then(async () => {
+  //   await foo()
+  // })
   .catch(error => {
     console.error('Server start failed')
     console.error(error)
   })
+
+// async function foo() {
+//   const fetchBrief = require('../fushion/prevue/crawler/movie-appender').default
+//   const fetchDetail = require('../fushion/prevue/crawler/movie-detail-provider').default
+//   const fetchTrailer = require('../fushion/prevue/crawler/movie-trailer-provider').default
+//   const ossUploader = require('../fushion/prevue/crawler/movie-oss-uploader').default
+//   const wrapper = {
+//     data: [],
+//     logs: ['Unfinish'],
+//     status: 'After initiate',
+//     discard: 0
+//   }
+//   return new Promise(resolve => {
+//     fetchBrief(wrapper)
+//       .then(fetchDetail)
+//       // .then(fetchTrailer)
+//       // .then(ossUploader)
+//       .then(wrapper => {
+//         console.log(wrapper)
+//         resolve(wrapper)
+//       })
+//       .catch(error => {
+//         console.log(error)
+//       })
+//   })
+}

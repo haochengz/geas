@@ -1,13 +1,14 @@
 
+
 const cp = require('child_process')
 const r = require('path').resolve
 
-module.exports = function() {
+module.exports = function(movies) {
   return new Promise((resolve, reject) => {
-    console.info('Douban movie list fetcher starting...')
-    const doubanCrawlerPath = r(__dirname, '../crawler/douban-list.js')
-    const child = cp.fork(doubanCrawlerPath, [])
+    const scriptPath = r(__dirname, '../douban-trailer.js')
+    const child = cp.fork(scriptPath, [])
     let invoked = false
+    let bundle = []
 
     child.on('error', error => {
       if (invoked) return
@@ -20,10 +21,14 @@ module.exports = function() {
       invoked = true
       if(code !== 0)
         reject(`Movie list fetching exited with code: ${code}`)
+      else resolve(bundle)
     })
 
-    child.on('message', bundle => {
-      resolve(bundle.result)
+    child.on('message', async data => {
+      console.log(data)
+      bundle.push(data)
     })
+    
+    child.send(movies)
   })
 }

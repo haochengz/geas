@@ -1,9 +1,7 @@
 
 import mockingoose from 'mockingoose'
-
 require('../database/schema/movie.schema')
-const getAllMovies = require('./movie').__get__('getAllMovies')
-const getMovie = require('./movie').__get__('getMovie')
+const { getAllMovies, getMovie, isExist } = require('./movie')
 
 beforeEach(() => {
   mockingoose.resetAll()
@@ -32,5 +30,22 @@ describe('getMovie()', () => {
       expect(error).toBe('Must have an id or doubanId field in parameter')
       done()
     }
+  })
+})
+
+describe('isExist()', () => {
+  it('should return false if the doubanId were not existed in db', async () => {
+    mockingoose.Movie.toReturn(null, 'findOne')
+    const res = await isExist({doubanId: '12345'})
+    expect(res).toBe(false)
+  })
+
+  it('should return true if the doubanId were already existed in db', async () => {
+    mockingoose.Movie.toReturn({
+      doubanId: '12345',
+      title: 'some movie'
+    }, 'findOne')
+    const res = await isExist({doubanId: '12345'})
+    expect(res).toBe(true)
   })
 })
