@@ -52,8 +52,8 @@ function detailProvider(wrapper) {
       } catch(error) {
         details = {}
       }
-      const movies = Object.assign(item, details)
-      return movies
+      const movie = Object.assign(item, details)
+      return movie
     })
     Promise.all(filled)
       .then(m => wrapper.data = m)
@@ -62,7 +62,8 @@ function detailProvider(wrapper) {
 }
 
 function validityFilter(wrapper) {
-  const cleanData = wrapper.data.filter(item => item.year)
+  console.log(wrapper)
+  const cleanData = wrapper.data.filter(item => !!item.summary)
   if(cleanData.length < 1) throw new Error('!!data set was empty')
   wrapper.data = cleanData
   return wrapper

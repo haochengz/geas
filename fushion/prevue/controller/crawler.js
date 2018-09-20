@@ -1,24 +1,6 @@
 
-export default class Crawler {
-  constructor() {
-    this.status = 'Before initiate'
-    this.logs = []
-  }
-
-  start() {
-    this.initiate()
-    return this.report()
-  }
-
-  initiate() {
-    this.logs.push('Unfinish')
-  }
-
-  report() {
-    let report = ''
-    report += this.logs.join('\n')
-    return report
-  }
+export default function Crawler() {
+  this.data = null
 }
 
 //------------------------------------------------------------------------------

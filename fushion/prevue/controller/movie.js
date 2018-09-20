@@ -41,7 +41,7 @@ const updateMovie = async movie => {
   }
 }
 
-const isExisted = async (movie={}) => {
+const isExist = async (movie={}) => {
   if(!movie.id && !movie.doubanId) throw 'Must have an id or doubanId field in parameter'
   let doc = await Movie.findOne({
     $or: [
@@ -58,5 +58,5 @@ module.exports = {
   getMovie,
   addMovie,
   updateMovie,
-  isExisted
+  isExist
 }

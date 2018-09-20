@@ -1,7 +1,7 @@
 
 import mockingoose from 'mockingoose'
 require('../database/schema/movie.schema')
-const { getAllMovies, getMovie, isExisted } = require('./movie')
+const { getAllMovies, getMovie, isExist } = require('./movie')
 
 beforeEach(() => {
   mockingoose.resetAll()
@@ -33,10 +33,10 @@ describe('getMovie()', () => {
   })
 })
 
-describe('isExisted()', () => {
+describe('isExist()', () => {
   it('should return false if the doubanId were not existed in db', async () => {
     mockingoose.Movie.toReturn(null, 'findOne')
-    const res = await isExisted({doubanId: '12345'})
+    const res = await isExist({doubanId: '12345'})
     expect(res).toBe(false)
   })
 
@@ -45,7 +45,7 @@ describe('isExisted()', () => {
       doubanId: '12345',
       title: 'some movie'
     }, 'findOne')
-    const res = await isExisted({doubanId: '12345'})
+    const res = await isExist({doubanId: '12345'})
     expect(res).toBe(true)
   })
 })

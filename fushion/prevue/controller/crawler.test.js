@@ -3,23 +3,12 @@ import Crawler from './crawler'
 
 describe('Crawler Factory Test', () => {
   let crawler = null
-
   beforeEach(() => {
     crawler = new Crawler()
   })
-  it('should creates a crawler instance', () => {
-    expect(crawler.status).toBe('Before initiate')
-  })
 
-  it('should resolves a string to report by calling start method', async () => {
-    const report = await crawler.start()
-    expect(typeof report).toBe('string')
-  })
-
-  it('should report the crawler to be done or failed', async () => {
-    const report = await crawler.start()
-    const firstLine = report.split('\n')[0]
-    expect(firstLine).toBe('Unfinish')
+  it('should create an instance of Crawler', () => {
+    expect(typeof crawler).toBe('object')
   })
 })
 

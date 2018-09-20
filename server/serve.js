@@ -32,13 +32,27 @@ load(app)
   })
 
 // async function foo() {
-//   const mongoose = require('mongoose')
-//   const uploader = require('../fushion/prevue/crawler/douban-uploader')
-//   const Movie = mongoose.model('Movie')
-//   const movies = await Movie.find({
-//     rate: { $gt: 8.5 }
+//   const fetchBrief = require('../fushion/prevue/crawler/movie-appender').default
+//   const fetchDetail = require('../fushion/prevue/crawler/movie-detail-provider').default
+//   const fetchTrailer = require('../fushion/prevue/crawler/movie-trailer-provider').default
+//   const ossUploader = require('../fushion/prevue/crawler/movie-oss-uploader').default
+//   const wrapper = {
+//     data: [],
+//     logs: ['Unfinish'],
+//     status: 'After initiate',
+//     discard: 0
+//   }
+//   return new Promise(resolve => {
+//     fetchBrief(wrapper)
+//       .then(fetchDetail)
+//       // .then(fetchTrailer)
+//       // .then(ossUploader)
+//       .then(wrapper => {
+//         console.log(wrapper)
+//         resolve(wrapper)
+//       })
+//       .catch(error => {
+//         console.log(error)
+//       })
 //   })
-//   console.log(movies)
-//   const res = await uploader(movies)
-//   console.log(res)
-// }
+}
