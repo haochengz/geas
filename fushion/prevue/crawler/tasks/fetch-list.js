@@ -2,7 +2,7 @@
 const cp = require('child_process')
 const r = require('path').resolve
 
-module.exports = function() {
+module.exports = function(itemNum=40) {
   return new Promise((resolve, reject) => {
     console.info('Douban movie list fetcher starting...')
     const doubanCrawlerPath = r(__dirname, '../douban-list.js')
@@ -23,7 +23,10 @@ module.exports = function() {
     })
 
     child.on('message', bundle => {
+      console.log('messaging success')
       resolve(bundle.result)
     })
+
+    child.send(itemNum)
   })
 }

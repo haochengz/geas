@@ -48,7 +48,7 @@ describe('unfoldList(page, url)', () => {
       waitForSelector: jest.fn(),
       click: jest.fn().mockResolvedValue()
     }
-    await unfoldList(pageMock, '')
+    await unfoldList(pageMock, '', 40)
 
     expect(pageMock.click).toHaveBeenCalledTimes(1)
   })

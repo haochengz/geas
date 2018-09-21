@@ -21,7 +21,7 @@ export default function fetchBrief(wrapper) {
 
 async function fetch(wrapper) {
   try {
-    const result = await fetchList()
+    const result = await fetchList(3)
     if(result.data.length < 1){
       throw new Error('!!No any items from list page were found')
     }

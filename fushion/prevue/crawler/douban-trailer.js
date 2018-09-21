@@ -60,12 +60,9 @@ process.on('message', async movies => {
       continue
     }
 
-    const data = {
-      doubanId,
-      video,
-      cover: result.videoCover
-    }
-    process.send(data)
+    movies[i].video = video
+    movies[i].cover = result.videoCover
+    process.send(movies[i])
   }
 
   browser.close()

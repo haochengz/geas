@@ -18,16 +18,20 @@ async function getBrowser() {
   return browser
 }
 
-function unfoldList(page, url) {
+function unfoldList(page, url, itemNum) {
   return new Promise(async (resolve, reject) => {
     try {
       await page.goto(url, {
         waitUntil: 'networkidle2'
       })
       await page.waitForSelector('.more')
-      page.click('.more')
-        .then(() => sleep(3000))
-        .then(() => resolve(page))
+      if(itemNum >= 20) {
+        page.click('.more')
+          .then(() => sleep(3000))
+          .then(() => resolve(page))
+      } else {
+        resolve(page)
+      }
     } catch(error) {
       reject('Unfold the list page failed because: ' + error)
     }
@@ -57,32 +61,42 @@ const extractItems = async page => {
   return movies
 }
 
-async function fetch() {
+async function fetch(itemNum) {
+  console.log('create broswer')
   const browser = await getBrowser()
+  console.log('open new page')
   const emptyPage = await browser.newPage()
-  const page = await unfoldList(emptyPage, tempUrl)
+  console.log('unfold list')
+  const page = await unfoldList(emptyPage, tempUrl, itemNum)
+  console.log('extract items')
   const result = await extractItems(page)
+  console.log('done')
   browser.close()
-  return result
+  if(itemNum <= 20)
+    return result.slice(0, itemNum)
+  else
+    return result
 }
 
 // eslint-disable-next-line no-extra-semi
-;(async function() {
+process.on('message', async itemNum => {
   let result = {
     status: 'Browser never started',
     data: null
   }
   try {
-    result.data = await fetch()
+    result.data = await fetch(itemNum)
     result.status = `${result.data.length} movies were updated`
   } catch(error) {
+    console.log(error)
     result = {
       status: error,
       data: result.data
     }
   }
+  console.log('send to father')
   process.send({
     result
   })
   process.exit(0)
-})()
+})
