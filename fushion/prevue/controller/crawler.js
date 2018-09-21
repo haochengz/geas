@@ -1,6 +1,53 @@
 
+import mongoose from 'mongoose'
+const Movie = mongoose.model('Movie')
+
 export default function Crawler() {
   this.data = null
+  this.start = start
+}
+
+function start() {
+  const fetchBrief = require('../crawler/movie-appender').default
+  const fetchDetail = require('../crawler/movie-detail-provider').default
+  const fetchTrailer = require('../crawler/movie-trailer-provider').default
+  const ossUploader = require('../crawler/movie-oss-uploader').default
+  const wrapper = {
+    data: [],
+    logs: ['Unfinish'],
+    status: 'After initiate',
+    discard: 0
+  }
+  return new Promise(resolve => {
+    fetchBrief(wrapper)
+      .then(m => {
+        console.log('fetching Detail')
+        return fetchDetail(m)
+      })
+      .then(n => {
+        console.log('fetching Trailer')
+        return fetchTrailer(n)
+      })
+      .then(o => {
+        console.log('uploading to OSS')
+        return ossUploader(o)
+      })
+      .then(wrapper => {
+        console.log('final results')
+        return wrapper.data
+      })
+      .then(models => {
+        const movies = models.map(async item => {
+          const movie = new Movie(item)
+          await movie.save()
+          return movie
+        })
+        resolve(movies)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
 }
 
 //------------------------------------------------------------------------------
